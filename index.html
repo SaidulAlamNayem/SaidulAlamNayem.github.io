@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saidul Alam Nayem</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Saidul Alam Nayem — Solution & Implementation Lead for AI retail-execution SaaS. Dhaka, Bangladesh.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a field-report page — shelf-grid motif in the hero, metric "price tags", a planogram-style work grid, a dated ledger for experience. */
+:root{
+  --paper:#F4F6F5; --card:#FFFFFF; --ink:#13211F; --muted:#56635F; --line:#D9E0DD;
+  --teal:#0D7468; --teal-soft:#DCEDEA; --tag:#E9A23B; --tag-ink:#3B2606;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0F1716; --card:#162120; --ink:#E7EFEC; --muted:#9AAAA5; --line:#27403B;
+  --teal:#4FC2B2; --teal-soft:#16302C; --tag:#F0B556; --tag-ink:#2A1A03; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0F1716; --card:#162120; --ink:#E7EFEC; --muted:#9AAAA5; --line:#27403B;
+  --teal:#4FC2B2; --teal-soft:#16302C; --tag:#F0B556; --tag-ink:#2A1A03; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--body);margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:600}
+p{margin:0}
+a{color:var(--teal)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--tag);outline-offset:3px;border-radius:4px}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+section{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:62ch}
+.sec-head p{color:var(--muted)}
+
+/* hero */
+.hero{position:relative;padding-block:64px 56px;overflow:hidden}
+.shelf{position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:100% 56px,72px 100%;mask-image:linear-gradient(120deg,transparent 35%,#000 85%);-webkit-mask-image:linear-gradient(120deg,transparent 35%,#000 85%)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{display:block;color:var(--teal)}
+.role{font:600 1.15rem/1.4 var(--display);margin-top:18px}
+.lede{color:var(--muted);margin-top:14px;max-width:56ch}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:8px;font:600 .95rem/1 var(--body);text-decoration:none;border:1px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn:hover{transform:translateY(-1px)}
+.portrait{margin:0;justify-self:end;position:relative;width:min(100%,340px)}
+.portrait-frame{position:relative;aspect-ratio:4/5;max-width:100%}
+.portrait-frame::before{content:"";position:absolute;inset:18px -18px -18px 18px;border-radius:18px;background:var(--tag)}
+.portrait-frame img{position:relative;width:100%;height:100%;object-fit:cover;object-position:50% 30%;border-radius:18px;box-shadow:0 18px 40px -22px rgba(0,0,0,.45)}
+.portrait figcaption{position:absolute;left:-14px;bottom:28px;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font:500 .8rem/1 var(--mono)}
+.portrait figcaption i{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--teal-soft)}
+.glance{position:relative;margin:44px 0 0;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.glance div{padding:16px 18px;border-left:1px solid var(--line);min-width:0}
+.glance div:first-child{border-left:0}
+.glance dt{font:500 .72rem/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.glance dd{margin:4px 0 0;font-weight:600;font-size:.95rem;overflow-wrap:anywhere}
+
+/* metric tags */
+.tags{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tag{position:relative;background:var(--tag);color:var(--tag-ink);border-radius:6px 6px 6px 6px;padding:18px 18px 16px 30px;clip-path:polygon(14px 0,100% 0,100% 100%,14px 100%,0 50%)}
+.tag::before{content:"";position:absolute;left:12px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:var(--paper)}
+.tag b{display:block;font:800 clamp(1.7rem,3.4vw,2.3rem)/1 var(--display);font-variant-numeric:tabular-nums}
+.tag span{display:block;margin-top:6px;font-size:.86rem;line-height:1.35}
+
+/* work grid */
+.work{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.case{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.case .client{font:500 .78rem/1.3 var(--mono);color:var(--muted);letter-spacing:.04em}
+.case ul{margin:0;padding-left:18px;color:var(--muted);font-size:.93rem;display:grid;gap:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.chip{font:500 .74rem/1 var(--mono);padding:6px 8px;border-radius:5px;background:var(--teal-soft);color:var(--teal)}
+
+
+/* platform */
+.flow{list-style:none;margin:0 0 22px;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:f;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+.flow li{counter-increment:f;position:relative;padding:18px 18px 18px 18px;border-left:1px solid var(--line);display:grid;gap:6px;min-width:0}
+.flow li:first-child{border-left:0}
+.flow li::before{content:"0" counter(f);font:500 .75rem/1 var(--mono);color:var(--teal)}
+.flow b{font:700 1.05rem/1.2 var(--display)}
+.flow span{color:var(--muted);font-size:.9rem;line-height:1.45}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--teal-soft);border-radius:12px;padding:20px;display:grid;gap:8px;align-content:start;min-width:0}
+.kpi svg{width:72px;height:45px;fill:var(--line);stroke:none}
+.kpi svg .hi{fill:var(--teal)}
+.kpi svg .frame{fill:none;stroke:var(--muted);stroke-width:2}
+.kpi svg .grid{fill:none;stroke:var(--line);stroke-width:2}
+.kpi svg .tick{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.kpi h3{font-size:1.05rem}
+.kpi p{color:var(--muted);font-size:.9rem;line-height:1.45}
+.also{margin-top:16px;color:var(--muted);font-size:.92rem}
+.when-chip{justify-self:start;align-self:flex-start;font:500 .74rem/1 var(--mono);padding:6px 8px;border-radius:5px;background:var(--tag);color:var(--tag-ink)}
+
+/* ledger */
+.ledger{display:grid;gap:0;border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
+.row{display:grid;grid-template-columns:170px 1fr;gap:24px;padding:20px 22px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.when{font:500 .85rem/1.5 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.row h3 small{display:block;font:400 .9rem/1.4 var(--body);color:var(--muted);margin-top:4px}
+.row p{margin-top:8px;color:var(--muted);font-size:.94rem;max-width:68ch}
+
+/* skills + edu */
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:28px}
+.skill-groups{display:grid;gap:18px}
+.skill-groups h3{font-size:.95rem;margin-bottom:8px}
+.edu{display:grid;gap:14px}
+.edu div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.edu p{color:var(--muted);font-size:.92rem;margin-top:4px}
+
+/* quote */
+blockquote{margin:0;max-width:760px;font:600 clamp(1.25rem,2.6vw,1.65rem)/1.4 var(--display);letter-spacing:-.005em}
+blockquote::before{content:"“";display:block;font-size:3.2rem;line-height:.6;color:var(--tag)}
+cite{display:block;margin-top:18px;font:500 .88rem/1.4 var(--mono);font-style:normal;color:var(--muted)}
+
+/* contact */
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.contact div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:6px;min-width:0}
+.contact .v{font-weight:600;overflow-wrap:anywhere}
+.copy{justify-self:start;font:500 .8rem/1 var(--mono);padding:7px 10px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+footer{padding-block:28px 40px;color:var(--muted);font:400 .82rem/1.5 var(--mono);border-top:1px solid var(--line)}
+
+@media (max-width:860px){
+  .hero-grid,.two{grid-template-columns:1fr}
+  .portrait{justify-self:start;width:min(78%,300px);order:-1}
+  .glance{grid-template-columns:repeat(2,1fr)}
+  .glance div:nth-child(3){border-left:0}
+  .glance div:nth-child(n+3){border-top:1px solid var(--line)}
+  .work{grid-template-columns:1fr}
+  .flow,.kpis{grid-template-columns:repeat(2,1fr)}
+  .flow li:nth-child(3){border-left:0}
+  .flow li:nth-child(n+3){border-top:1px solid var(--line)}
+  .tags{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:560px){
+  .row{grid-template-columns:1fr;gap:6px}
+  .tags{grid-template-columns:1fr}
+  .flow,.kpis{grid-template-columns:1fr}
+  .flow li{border-left:0;border-top:1px solid var(--line)}
+  .flow li:first-child{border-top:0}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hero h1,.role,.lede,.actions,.portrait{animation:rise .6s ease both}
+  .role{animation-delay:.06s}.lede{animation-delay:.12s}.portrait{animation-delay:.1s}.actions{animation-delay:.24s}
+  @keyframes rise{from{opacity:.001;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .btn{transition:transform .15s ease}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="shelf" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow">Solution &amp; Implementation · AI Retail Execution</p>
+      <h1>Saidul Alam <span>Nayem</span></h1>
+      <p class="role">Senior Manager, Operations &amp; Business at HawkEyes Digital Monitoring</p>
+      <p class="lede">I turn field-operations problems into AI and computer-vision products that sales teams actually use, from the first requirement workshop to national rollout and the account relationship after launch.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://www.linkedin.com/in/saidul-alam-nayem" target="_blank" rel="noopener">LinkedIn profile</a>
+        <a class="btn" href="#contact">Contact details</a>
+      </div>
+    </div>
+    <figure class="portrait">
+      <div class="portrait-frame"><img src="photo.jpg" alt="Portrait of Saidul Alam Nayem" width="420" height="420"></div>
+      <figcaption><i></i>Dhaka, Bangladesh</figcaption>
+    </figure>
+  </div>
+  <div class="wrap">
+    <dl class="glance" aria-label="At a glance">
+      <div><dt>Focus</dt><dd>Solution design, implementation, key accounts</dd></div>
+      <div><dt>Clients</dt><dd>Unilever, BAT, Nagad</dd></div>
+      <div><dt>Experience</dt><dd>6 years, Executive → Senior Manager</dd></div>
+      <div><dt>Languages</dt><dd>English, Bengali, Hindi</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main>
+  <section aria-labelledby="impact">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Field results</p>
+        <h2 id="impact">What the work runs at today</h2>
+      </div>
+      <div class="tags">
+        <div class="tag"><b>~750k</b><span>retail outlets covered in the current market launch</span></div>
+        <div class="tag"><b>95%+</b><span>AI recognition accuracy, up from the mid-80s</span></div>
+        <div class="tag"><b>200+</b><span>field and portal users trained personally</span></div>
+        <div class="tag"><b>6 yrs</b><span>delivering enterprise retail-execution platforms</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="platform">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">The product</p>
+        <h2 id="platform">How the retail-execution platform works</h2>
+        <p>Used by Unilever Bangladesh (M-Lens) and British American Tobacco Bangladesh (Market Lenz). A field rep photographs the shelf; the system does the rest.</p>
+      </div>
+      <ol class="flow">
+        <li><b>Capture</b><span>Rep takes shelf photos on a light mobile app, geo-tagged at the outlet</span></li>
+        <li><b>Recognise</b><span>Computer vision and OCR read every SKU, sachet and display item</span></li>
+        <li><b>Score</b><span>Each outlet is scored against the brand's execution standards</span></li>
+        <li><b>Act</b><span>Managers see gaps by outlet, region and channel on web dashboards</span></li>
+      </ol>
+      <div class="kpis">
+        <article class="kpi">
+          <svg viewBox="0 0 64 40" aria-hidden="true"><rect x="2" y="30" width="60" height="3" rx="1"/><rect class="hi" x="6" y="8" width="9" height="22" rx="2"/><rect class="hi" x="17" y="8" width="9" height="22" rx="2"/><rect class="hi" x="28" y="8" width="9" height="22" rx="2"/><rect x="39" y="8" width="9" height="22" rx="2"/><rect x="50" y="8" width="9" height="22" rx="2"/></svg>
+          <h3>Share of shelf</h3><p>Brand and SKU facings against competitors on every shelf.</p>
+        </article>
+        <article class="kpi">
+          <svg viewBox="0 0 64 40" aria-hidden="true"><rect x="2" y="3" width="60" height="3" rx="1"/><rect class="hi" x="8" y="8" width="7" height="12" rx="1"/><rect class="hi" x="8" y="22" width="7" height="12" rx="1"/><rect class="hi" x="19" y="8" width="7" height="12" rx="1"/><rect x="19" y="22" width="7" height="12" rx="1"/><rect x="38" y="8" width="7" height="12" rx="1"/><rect x="49" y="8" width="7" height="12" rx="1"/><rect x="49" y="22" width="7" height="12" rx="1"/></svg>
+          <h3>Share of sachet</h3><p>Mini-packs and sachets detected on hangers and strips.</p>
+        </article>
+        <article class="kpi">
+          <svg viewBox="0 0 64 40" aria-hidden="true"><rect class="hi" x="6" y="4" width="22" height="16" rx="2"/><rect x="34" y="6" width="24" height="5" rx="1"/><path class="hi" d="M40 14h12l-6 10z"/><rect x="6" y="26" width="52" height="10" rx="2"/></svg>
+          <h3>Share of visibility</h3><p>Posters, danglers and display units checked for presence and placement.</p>
+        </article>
+        <article class="kpi">
+          <svg viewBox="0 0 64 40" aria-hidden="true"><rect x="4" y="4" width="56" height="32" rx="3" class="frame"/><path d="M4 20h56M22 4v32M42 4v32" class="grid"/><path class="tick" d="M26 12l4 4 7-8"/><path class="tick" d="M46 28l4 4 7-8"/></svg>
+          <h3>Planogram adherence</h3><p>Actual shelf layout compared with the agreed planogram.</p>
+        </article>
+      </div>
+      <p class="also">Also tracked: product availability, out-of-stock flags, visit compliance and field-team scoring. Recognition accuracy is 95%+.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Selected work</p>
+        <h2 id="work">Where I delivered it</h2>
+      </div>
+      <div class="work">
+        <article class="case">
+          <p class="client">British American Tobacco Bangladesh</p>
+          <h3>Market Lenz</h3>
+          <p class="when-chip">2024 – now</p>
+          <ul>
+            <li>Led the build from requirements to client approval and rollout.</li>
+            <li>Key account manager since 2026; execution across ~750,000 outlets.</li>
+          </ul>
+        </article>
+        <article class="case">
+          <p class="client">Unilever Bangladesh</p>
+          <h3>M-Lens</h3>
+          <p class="when-chip">Launched Feb 2024</p>
+          <ul>
+            <li>Requirements, solution design, UAT and national field rollout.</li>
+            <li>Key account manager for the account as Manager.</li>
+          </ul>
+        </article>
+        <article class="case">
+          <p class="client">Nagad · fintech</p>
+          <h3>Nagad Pulse</h3>
+          <p class="when-chip">2023</p>
+          <ul>
+            <li>National platform tracking merchandisers placing branding and POS material.</li>
+            <li>Planning and implementation from scope to go-live.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="exp">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Experience</p>
+        <h2 id="exp">Six years at HawkEyes Digital Monitoring</h2>
+        <p>Promoted four times, from field data operations to running solution design and key accounts.</p>
+      </div>
+      <div class="ledger">
+        <div class="row"><p class="when">Jul 2025 – now</p><div><h3>Senior Manager, Operations &amp; Business<small>Dhaka</small></h3><p>Key account manager for Market Lenz, the AI retail-execution platform for British American Tobacco Bangladesh; solution design across FMCG, tobacco and fintech; enterprise pre-sales workshops, demos and proof-of-concept design; SOP libraries, requirement templates and escalation paths for the delivery team.</p></div></div>
+        <div class="row"><p class="when">Jul 2024 – Jun 2025</p><div><h3>Manager, Business Development</h3><p>Key account manager for Unilever Bangladesh while leading the Market Lenz build for British American Tobacco Bangladesh from requirements through rollout; market expansion and partnerships across FMCG and enterprise accounts.</p></div></div>
+        <div class="row"><p class="when">Jun 2023 – Jun 2024</p><div><h3>Assistant Manager, Business Development</h3><p>Launched M-Lens with Unilever Bangladesh in February 2024 and delivered Nagad Pulse for Nagad.</p></div></div>
+        <div class="row"><p class="when">Jan 2022 – May 2023</p><div><h3>Senior Executive, Operations &amp; Business Development</h3><p>Requirement gathering, solution design, development coordination and validation between client and engineering; built the National Merchandising Survey for British American Tobacco Bangladesh, later folded into Market Lenz.</p></div></div>
+        <div class="row"><p class="when">Jul 2020 – Dec 2021</p><div><h3>Executive, Operations</h3><p>Field data verification, validation and integration with continuous field and client support across enterprise retail accounts.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="skills">
+    <div class="wrap two">
+      <div>
+        <div class="sec-head"><p class="eyebrow">Skills</p><h2 id="skills">How I work</h2></div>
+        <div class="skill-groups">
+          <div><h3>Product &amp; delivery</h3><div class="chips"><span class="chip">Requirements &amp; BRDs</span><span class="chip">User stories &amp; acceptance criteria</span><span class="chip">Backlog prioritisation</span><span class="chip">UAT &amp; product readiness</span><span class="chip">National rollout</span><span class="chip">SOPs &amp; knowledge bases</span></div></div>
+          <div><h3>Client &amp; commercial</h3><div class="chips"><span class="chip">Key account management</span><span class="chip">Enterprise pre-sales</span><span class="chip">Solution consulting</span><span class="chip">Partnerships</span><span class="chip">Customer success</span></div></div>
+          <div><h3>AI &amp; technology</h3><div class="chips"><span class="chip">Computer vision &amp; OCR use cases</span><span class="chip">Solution architecture</span><span class="chip">Prompt engineering</span><span class="chip">AI-assisted prototyping</span></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><p class="eyebrow">Education</p><h2>Engineering background</h2></div>
+        <div class="edu">
+          <div><h3>BSc, Electrical &amp; Electronics Engineering</h3><p>Bangladesh University of Business and Technology (BUBT) · 2017 – 2021 · CGPA 3.25 / 4.00</p></div>
+          <div><h3>Diploma in Engineering, Electronics</h3><p>Patuakhali Polytechnic Institute · 2012 – 2016</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Recommendation">
+    <div class="wrap">
+      <p class="eyebrow" style="margin-bottom:18px">Recommendation</p>
+      <blockquote>When I hand Nayem a task, I know it is in safe hands. He takes complete ownership from start to finish, keeps me informed without needing to be followed up, and delivers on the date he commits to.</blockquote>
+      <cite>Mirza Ferdous Ohid · Co-Founder &amp; CEO, HawkEyes Digital Monitoring · on LinkedIn</cite>
+    </div>
+  </section>
+
+  <section id="contact" aria-labelledby="contact-h">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Contact</p><h2 id="contact-h">Let's talk about your next rollout</h2><p>Happy to talk about retail-execution, AI deployment and implementation work.</p></div>
+      <div class="contact">
+        <div><p class="eyebrow">Email</p><p class="v" id="email-v">saidulalam411@gmail.com</p><button class="copy" type="button" data-copy="email-v">Copy email</button></div>
+        <div><p class="eyebrow">Phone / WhatsApp</p><p class="v" id="phone-v">+880 1795 836448</p><button class="copy" type="button" data-copy="phone-v">Copy number</button></div>
+        <div><p class="eyebrow">LinkedIn</p><p class="v"><a href="https://www.linkedin.com/in/saidul-alam-nayem" target="_blank" rel="noopener">linkedin.com/in/saidul-alam-nayem</a></p></div>
+        <div><p class="eyebrow">Location</p><p class="v">Dhaka, Bangladesh</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Saidul Alam Nayem</div></footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var el=document.getElementById(b.dataset.copy), t=el.textContent.trim(), old=b.textContent;
+    function done(msg){b.textContent=msg;setTimeout(function(){b.textContent=old},1600)}
+    function sel(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);done('Selected, press Ctrl+C')}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done('Copied')},sel)}else{sel()}
+  });
+});
+</script>
+</body>
+</html>
